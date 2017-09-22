@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -40,6 +41,19 @@ public class UserServiceImpl implements UserService {
         user.setId(id++);
         users.add(user);
         return user;
+    }
+
+    public User deleteUserById(int id){
+        User user = null;
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()){
+            user = iterator.next();
+            if(user.getId().equals(id)){
+                iterator.remove();
+                return user;
+            }
+        }
+        return null;
     }
 
 }
