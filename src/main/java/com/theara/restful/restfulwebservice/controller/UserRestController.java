@@ -1,6 +1,7 @@
 package com.theara.restful.restfulwebservice.controller;
 
 import com.theara.restful.restfulwebservice.model.User;
+import com.theara.restful.restfulwebservice.model.exception.UserNotFoundException;
 import com.theara.restful.restfulwebservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,12 @@ public class UserRestController {
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable Integer id){
-        return userService.getUserById(id);
+        User user = userService.getUserById(id);
+
+        if(user == null)
+            throw new UserNotFoundException("id-" + id);
+
+        return user;
     }
 
     @PostMapping("users")
