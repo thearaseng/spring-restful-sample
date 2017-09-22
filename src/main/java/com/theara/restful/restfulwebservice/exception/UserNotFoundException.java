@@ -1,4 +1,4 @@
-package com.theara.restful.restfulwebservice.model.exception;
+package com.theara.restful.restfulwebservice.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
