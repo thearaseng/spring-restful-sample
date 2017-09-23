@@ -4,6 +4,10 @@ import com.theara.restful.restfulwebservice.model.User;
 import com.theara.restful.restfulwebservice.exception.UserNotFoundException;
 import com.theara.restful.restfulwebservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -11,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+
 
 @RestController()
 public class UserRestController {
@@ -28,13 +33,20 @@ public class UserRestController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Integer id){
+    public Resource<User> getUserById(@PathVariable Integer id){
         User user = userService.getUserById(id);
 
         if(user == null)
             throw new UserNotFoundException("id-" + id);
 
-        return user;
+        Resource<User> resource = new Resource<>(user);
+
+        ControllerLinkBuilder linkBuilder =
+                linkTo(methodOn(this.getClass()).getAllUsers());
+
+        resource.add(linkBuilder.withRel("all-users"));
+
+        return resource;
     }
 
     @PostMapping("users")
